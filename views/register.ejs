@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration-Lahcen Aboudrar</title>
+    <link rel="stylesheet" href="css/style-login.css">
+</head>
+<body>
+  
+
+    <div class="login-light"></div>
+    <div class="login-box">
+
+
+        <form id="registrationForm" method="post" action="/register">
+            <input type="checkbox" class="input-check" id="input-check">
+            <label for="input-check" class="toggle">
+                <span class="text off">off</span>
+                <span class="text on">on</span>
+            </label>
+            <div class="light"></div>
+
+            <h2>Register</h2>
+            <div class="input-box">
+                <span class="icon">
+                    <ion-icon name="mail"></ion-icon>
+                </span>
+                <input type="email" id="username" name="username" required>
+                <label>Email</label><br>
+                <div class="input-line"></div>
+            </div>
+            <div class="input-box">
+                <span class="icon">
+                    <ion-icon name="lock-closed"></ion-icon>
+                </span>
+                <input type="password" id="password" name="password" required>
+                <label>Password</label>
+                <div class="input-line"></div>
+            </div>
+            <div class="remember-forgot">
+                <label><input type="checkbox"> Remember me</label>
+                <a href="#">Forgot Password?</a>
+            </div>
+            <button type="submit">Register</button>
+           
+            <div class="register-link">
+                <p>Don't have an account? <a href="/login">Login</a></p>
+            </div>
+        </form>
+    <script>
+        document.getElementById("registrationForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission
+            
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Send username and password to server for registration
+            registerUser(username, password);
+        });
+    
+        function registerUser(username, password) {
+            fetch("/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ username: username, password: password })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Registration failed.");
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data.message); // Log success message from server
+                alert("User created")
+            })
+            .catch(error => {
+                console.error("Registration error:", error.message);
+                // Display an error message to the user
+                alert("User already exists")
+            });
+        }
+    
+           
+       
+    </script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

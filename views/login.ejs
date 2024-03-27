@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login-Lahcen Aboudrar</title>
+    <link rel="stylesheet" href="css/style-login.css">
+</head>
+<body>
+
+
+    <h1>Second form</h1>
+    <div class="login-light"></div>
+    <div class="login-box">
+        <form id="loginForm" action="/login" method="post">
+            <input type="checkbox" class="input-check" id="input-check">
+            <label for="input-check" class="toggle">
+                <span class="text off">off</span>
+                <span class="text on">on</span>
+            </label>
+            <div class="light"></div>
+
+            <h2>Login</h2>
+            <div class="input-box">
+                <span class="icon">
+                    <ion-icon name="mail"></ion-icon>
+                </span>
+                <input type="email" id="username" name="username" required>
+                <label>Email</label><br>
+                <div class="input-line"></div>
+            </div>
+            <div class="input-box">
+                <span class="icon">
+                    <ion-icon name="lock-closed"></ion-icon>
+                </span>
+                <input type="password" id="password" name="password" required>
+                <label>Password</label>
+                <div class="input-line"></div>
+            </div>
+            <div class="remember-forgot">
+                <label><input type="checkbox"> Remember me</label>
+                <a href="#">Forgot Password?</a>
+            </div>
+            <button type="submit">Login</button>
+           
+            <div class="register-link">
+                <p>Don't have an account? <a href="/register">Register</a></p>
+            </div>
+        </form>
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission
+            
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Send username and password to server for login
+            loginUser(username, password);
+        });
+
+        function loginUser(username, password) {
+            fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ username: username, password: password })
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else if (response.status === 400) {
+                    throw new Error("Incorrect username or password.");
+                } else {
+                    throw new Error("Server error. Please try again later.");
+                }
+            })
+            .then(data => {
+                console.log(data.message); // Log success message from server
+                alert("User logged in successfully!");
+                window.location.href = "/index.html";  // redirect the user to portefplio website
+            })
+            .catch(error => {
+                console.error("Login error:", error.message);
+                // Display error message to the user
+                alert(error.message);
+            });
+        }
+    </script>
+
+    
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
